@@ -1,5 +1,8 @@
-// find button on page
+// Find button on page
 const btn = document.querySelector('button');
+
+// Find container on page
+const container = document.querySelector('.container');
 
 function getPosts(cb) {
     // Create xhr object
@@ -26,9 +29,28 @@ function getPosts(cb) {
     xhr.send();
 }
 
+function renderPosts(response) {
+    const fragment = document.createDocumentFragment();
+    response.forEach(post => {
+        const card = document.createElement('div');
+        card.classList.add('card');
+        const cardBody = document.createElement('div');
+        cardBody.classList.add('card-body');
+        const cardTitle = document.createElement('h5');
+        cardTitle.classList.add('card-title');
+        cardTitle.textContent = post.title;
+        const cardText = document.createElement('p');
+        cardText.classList.add('card-text');
+        cardText.textContent = post.body
+        cardBody.appendChild(cardTitle);
+        cardBody.appendChild(cardText);
+        card.appendChild(cardBody);
+        fragment.appendChild(card);
+    });
+    container.appendChild(fragment);
+}
+
 // Add Listner to button
 btn.addEventListener('click', (e) => {
-    getPosts((response) => {
-        console.log(response);
-    });
+    getPosts(renderPosts);
 });
